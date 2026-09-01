@@ -1,0 +1,44 @@
+{:itonami.blueprint/id "cloud-itonami-souji"
+ :itonami.blueprint/name "Cleaning Robot Design (Physical AI, Starlink Direct-assisted remote supervision)"
+ :itonami.blueprint/domain :robotics/cleaning-robot-design
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:household-labor-reduction :disaster-cleanup :accessibility]
+ :itonami.blueprint/governor :cleaning-robot-design-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:identity :forms :dmn :audit-ledger :robotics :sim]
+ :itonami.blueprint/optional-technologies [:x402]
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/maturity :scaffolded
+ :itonami.blueprint/implemented-slice
+ "R0 scaffold: Cleaning Robot Design Governor ⊣ Advisor actor skeleton.
+ Design-only repo: every op is :propose or :observe. There is NO op that
+ drives a physical robot — actuator command paths do not exist in this repo
+ and must never be added here (physical control belongs to a separate runtime
+ repo when one is created). Safety gates (child/pet contact stop, sharp-object
+ stop) are permanent structural invariants, inherited from the esim actor's
+ SIM-swap-refusal pattern: they are absent from no phase's :auto set and the
+ governor refuses to lower them. All design values (battery capacity, sweep
+ rate, obstacle-avoidance rate) are modelled-labelled — no measured data
+ exists yet. Starlink Direct is the assumed remote-monitoring transport:
+ no spectrum of our own, coverage truth external (Starlink coverage map)."
+ :itonami.blueprint/operations
+ [{:op/name :design/propose
+   :op/effect :propose
+   :op/note "mechanism configuration proposal (brush count, vacuum path, obstacle-sensing layout)"}
+  {:op/name :design/validate
+   :op/effect :propose
+   :op/note "invariant check: sweep coverage rate per floor area, obstacle-avoidance rate; all values modelled-labelled"}
+  {:op/name :safety/gate
+   :op/effect :propose
+   :op/note "child/pet contact stop conditions, sharp-object stop — permanent structural gate, never absent from any phase's :auto set"}
+  {:op/name :sim/run
+   :op/effect :propose
+   :op/note "virtual cleaning simulation (floor area, obstacles, battery); results are modelled, not measured"}
+  {:op/name :bom/observe
+   :op/effect :observe
+   :op/note "read-only observation of the bill of materials; prices are never proposed (unsettled)"}]
+ :itonami.blueprint/boundaries
+ {:physical-control "no op drives a real robot; design-only (actuator paths belong to a separate runtime)"
+  :robot "cloud-itonami/robot is the general-purpose robot repo; this repo specialises in cleaning-robot design"
+  :open-robo "cloud-itonami/open-robo is the OSS robot platform; this repo designs applications on top"
+  :starlink "remote monitoring via Starlink Direct wholesale; no spectrum of our own"}}
