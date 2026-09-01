@@ -1,5 +1,6 @@
 (ns souji.design.operation-test
   (:require [clojure.test :refer [deftest is testing]]
+            [clojure.string :as str]
             [souji.design.operation :as op]))
 
 (deftest ops-are-declared-design-only
@@ -46,7 +47,9 @@
 
 (deftest sim-results-are-modelled-not-measured
   (testing "sim/run results carry the modelled label — no measured data exists"
-    (let [p (op/propose :sim/run {:floor-area 20 :obstacles 5 :battery 3000})]
-      (is (= :approved-for-review (:proposal/status (op/govern p))))
-      (is (str/includes? (str (:proposal/note p)) "modelled")
-          "govern note reminds that sim output is modelled"))))
+    (let [p (op/propose :sim/run {:floor-area 20 :obstacles 5 :battery 3000})
+          g (op/govern p)]
+      (is (= :approved-for-review (:proposal/status g)))
+      (is (= :propose (:proposal/effect g)) "sim/run is a propose op")
+      (is (= "R0: propose-only; actuation path does not exist here" (:proposal/note g))
+          "govern note reminds that no actuation happens (design-only)"))))
