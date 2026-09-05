@@ -162,6 +162,22 @@ skeleton, and its tests. In particular:
 - **Every number in `blueprint.edn` is modelled**, and the repo says so. No
   measurement of a physical robot exists, because no physical robot exists.
 
+## What the green does not say
+
+`0 failures` is not the same as "checked". Three things this suite does not
+look at are recorded, with the probes that found them, in
+[ADR-0001](adr/0001-what-the-green-does-not-say.md):
+
+- **`blueprint.edn` is not compared to `src/`.** Measured: adding
+  `{:op/name :robot/command :op/effect :execute}` to `blueprint.edn` — the one
+  thing this repo exists to prevent — leaves all 7 tests green. The tests hold
+  the op set as a literal and never read the blueprint.
+- **The fleet mutation runner reports `0 suite` and exits 0** for this repo,
+  because no breakage is registered for it. "Nothing registered" and "all
+  caught" print identically.
+- **Maturity is scored on `:default` weights**, because
+  `manifest/repo-taxonomy.edn` has no `:repo/kind` row for this repo.
+
 ## If you are extending this
 
 The one rule that is not a preference: **do not add an op that actuates.**

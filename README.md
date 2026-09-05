@@ -1,7 +1,16 @@
 # cloud-itonami-souji
 
 **Physical-AI cleaning-robot design repo** (cloud-itonami / itonami.cloud).
-お掃除ロボの**設計**を agent 群(governor ⊣ advisor)で行う。ADR-2609011520 が正本。
+お掃除ロボの**設計**を agent 群(governor ⊣ advisor)で行う。**設計のみ**で、
+実機を駆動する op は存在しない。
+
+- 動かし方: [docs/operator-quickstart.md](docs/operator-quickstart.md)
+  (全コマンド実行済み)
+- 緑が検査していないもの: [docs/adr/0001](docs/adr/0001-what-the-green-does-not-say.md)
+- 正本は superproject の
+  `90-docs/adr/2800010300-cloud-itonami-souji-west-registration.edn` (accepted)。
+  ⚠ この README は 2026-09-05 まで「ADR-2609011520 が正本」と書いていたが、
+  **その ADR は `origin/main` に存在しない** — 経緯は ADR-0001 §4
 
 ## この repo が担うもの
 
