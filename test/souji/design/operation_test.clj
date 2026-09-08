@@ -1,6 +1,6 @@
 (ns souji.design.operation-test
   (:require [clojure.test :refer [deftest is testing]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [souji.design.operation :as op]))
 
 (deftest ops-are-declared-design-only
