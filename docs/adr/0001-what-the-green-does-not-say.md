@@ -24,7 +24,7 @@ them and fixing them are different iterations.
 
 ### 1. `blueprint.edn` drift is unchecked, and the probe stays green
 
-`blueprint.edn` and `src/souji/design/operation.clj` both declare the same five
+`blueprint.edn` and `src/souji/design/operation.cljk` both declare the same five
 ops. **Nothing compares them.** `operation_test.clj` holds the op set as a
 literal (`#{:design/propose :design/validate :safety/gate :sim/run
 :bom/observe}`) and never reads `blueprint.edn`.
