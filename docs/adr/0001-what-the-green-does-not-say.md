@@ -8,7 +8,7 @@
 
 ## Context
 
-`clojure -M:test` returns `Ran 7 tests containing 16 assertions. 0 failures,
+`kbb -M:test` returns `Ran 7 tests containing 16 assertions. 0 failures,
 0 errors.` [docs/operator-quickstart.md](../operator-quickstart.md) shows an
 operator how to run that and how to watch the refusals happen.
 
@@ -38,7 +38,7 @@ quickstart landed. Adding to `blueprint.edn`:
  :op/note "FABRICATED drift probe"}
 ```
 
-and running `clojure -M:test` gives **`Ran 7 tests containing 16 assertions.
+and running `kbb -M:test` gives **`Ran 7 tests containing 16 assertions.
 0 failures, 0 errors.`**, exit 0.
 
 So the one thing this repo exists to make impossible — an op with an
@@ -57,7 +57,7 @@ that no `:op/effect` outside `#{:propose :observe}` appears.
 From the superproject:
 
 ```bash
-nbb scripts/maturity-loop/run.cljs --only cloud-itonami-souji
+kbb --backend sci scripts/maturity-loop/run.cljk --only cloud-itonami-souji
 ```
 
 returns `maturity-loop: 0 suite / policy maturity-loop/mutation/v1`,
