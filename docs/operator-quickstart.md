@@ -25,7 +25,7 @@ That takes a minute; every command after it is fast.
 ## 1. Run the tests
 
 ```
-$ clojure -M:test
+$ kbb -M:test
 ```
 
 ```
@@ -40,7 +40,7 @@ If this is not green, stop here. Everything below assumes it is.
 ## 2. See which ops exist
 
 ```
-$ clojure -M -e "(require '[souji.design.operation :as op]) (prn (sort (map name op/op-names)))"
+$ kbb -M -e "(require '[souji.design.operation :as op]) (prn (sort (map name op/op-names)))"
 ```
 
 ```
@@ -58,7 +58,7 @@ both mandatory safety gates is refused by the governor — not warned about,
 refused.
 
 ```
-$ clojure -M -e "
+$ kbb -M -e "
 (require '[souji.design.operation :as op])
 (try (op/govern (op/propose :design/propose {:brush :dual-roller}))
      (catch clojure.lang.ExceptionInfo e
@@ -78,7 +78,7 @@ name the other.
 ## 4. A proposal that carries both gates
 
 ```
-$ clojure -M -e "
+$ kbb -M -e "
 (require '[souji.design.operation :as op] '[clojure.pprint :refer [pprint]])
 (pprint (op/govern (op/propose :design/propose
                                {:brush :dual-roller
@@ -111,7 +111,7 @@ the command above because the version without it fails with
 `:done` inside the governor. Everything else stops at review.
 
 ```
-$ clojure -M -e "
+$ kbb -M -e "
 (require '[souji.design.operation :as op])
 (println (:proposal/status (op/govern (op/propose :bom/observe {:as-of \"2026-09-05\"}))))
 (println (:proposal/status (op/govern (op/propose :sim/run {:floor-m2 42}))))"
@@ -129,7 +129,7 @@ returns for review like every other `:propose` op.
 ## 6. Confirm there is no way to drive hardware
 
 ```
-$ clojure -M -e "
+$ kbb -M -e "
 (require '[souji.design.operation :as op])
 (doseq [o [:motor/drive :robot/start :actuator/command]]
   (println o \"admitted?\" (op/admitted-op? o)))
