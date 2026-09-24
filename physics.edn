@@ -1,0 +1,44 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README: this repo designs a cleaning robot (brush, vacuum, wheels,
+;; lidar/camera, battery) and simulates cleaning (floor area, obstacles,
+;; battery). Design only -- no op drives hardware. Its physical work: the
+;; robot driving a straight pass over floors of increasing rolling
+;; resistance, its battery pack heating during a 90-minute run, and the
+;; dock refilling the mop reservoir from the clean-water tank.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis
+;; (the README's own rule: every number is `modelled`, no measured data yet).
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-souji"
+ :cases
+ [{:id :cleaning-pass-floor-type
+   :kind :transport
+   :procedure "robot vacuum drives one 5 m cleaning pass; rolling resistance rises from hard floor to deep-pile carpet"
+   :params {:mass-kg 3.5 :payload-kg 0.3 :distance-m 5.0 :v-max-mps 0.30 :a-max-mps2 0.5
+            :brake-decel-mps2 1.0 :drive-force-n 4.0 :cog-height-m 0.05
+            :support-half-length-m 0.12 :max-time-s 120.0}
+   :sweep {:param :crr :values [0.01 0.03 0.05 0.08 0.10 0.12]}
+   :quantity :cycle-time-s
+   :limit {:max 20.0 :basis "estimate: a 5 m pass at the 0.3 m/s design speed plus slack, so a room is covered within the modelled battery run"}
+   :boundary {:lo 0.005 :hi 0.2}}
+  {:id :battery-pack-run-heating
+   :kind :thermal
+   :procedure "Li-ion pack heats from its own losses through a 90-minute cleaning run; half thickness, mid-plane judged, faces the robot's internal air"
+   :params {:thickness-m 0.01 :conductivity-w-mk 1.0 :density-kg-m3 2500.0 :specific-heat-j-kgk 1000.0
+            :t0-c 25.0 :t-hot-c 30.0 :h-front-w-m2k 10.0 :h-back-w-m2k 0.0 :t-back-ambient-c 25.0
+            :threshold-c 60.0 :duration-s 5400.0 :nodes 11}
+   :sweep {:param :q-gen-w-m3 :values [10000.0 25000.0 50000.0 75000.0 100000.0]}
+   :quantity :peak-back-c
+   :limit {:max 60.0 :basis "estimate: upper discharge temperature typical of 18650 Li-ion cell datasheets; to be replaced by the chosen cell's datasheet"}
+   :boundary {:lo 1000.0 :hi 200000.0}}
+  {:id :dock-mop-refill
+   :kind :tank-drain
+   :procedure "dock refills the robot's 0.3 L mop reservoir by gravity from its full clean-water tank through the refill valve"
+   :params {:tank-area-m2 0.02 :h0-m 0.20 :h-target-m 0.185 :cd 0.62 :dt-s 0.05 :max-time-s 3600.0}
+   :sweep {:param :orifice-area-m2 :values [3.14e-6 7.07e-6 1.26e-5 1.96e-5 2.83e-5]}
+   :quantity :time-to-target-s
+   :limit {:max 60.0 :basis "estimate: a mop refill should finish within one minute of docking"}
+   :boundary {:lo 1.0e-6 :hi 5.0e-5}}]}
