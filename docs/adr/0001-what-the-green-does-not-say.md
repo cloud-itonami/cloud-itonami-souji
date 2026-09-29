@@ -14,7 +14,7 @@ operator how to run that and how to watch the refusals happen.
 
 This ADR records the other half: **what that green does not check.** It is
 written from probes, not from reading the source, because the failure mode the
-superproject CLAUDE.md keeps naming — *a check that could not run returns the
+superproject AGENTS.md keeps naming — *a check that could not run returns the
 same value as a check that ran and found nothing* — is invisible from reading.
 
 Three of the four items below are open. The ADR does not fix them; recording
